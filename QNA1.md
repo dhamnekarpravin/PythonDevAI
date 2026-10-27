@@ -360,3 +360,123 @@ Test both happy paths and error cases:
 - Display empty list
 
 **Simple answer:** Test what should work and what should fail.
+
+==========================
+
+# Day 3: Git, HTTP, and Web Fundamentals
+
+## 31. What is a Git branch?
+A branch is a separate version of your code that lets you work on features without affecting the main code. You can create, switch, and merge branches.
+
+```bash
+git branch feature-login    # Create branch
+git checkout feature-login  # Switch to branch
+git merge feature-login     # Merge branch
+```
+
+**Simple answer:** A branch is like a separate workspace where you can experiment without breaking the main code.
+
+---
+
+## 32. What is a Git commit?
+A commit saves your changes with a message describing what you did. Each commit is a snapshot of your code at that moment.
+
+```bash
+git add .
+git commit -m "Add login feature"
+```
+
+**Simple answer:** A commit is like saving your work with a note explaining what you changed.
+
+---
+
+## 33. What is a pull request (PR)?
+A pull request is a way to propose changes from one branch to another. It lets team members review your code before merging.
+
+**Simple answer:** A PR is asking teammates to review your code before you merge it into the main project.
+
+---
+
+## 34. What are the main HTTP methods?
+- **GET**: Retrieve data (e.g., get all tasks)
+- **POST**: Create new data (e.g., add a task)
+- **PUT/PATCH**: Update existing data (e.g., edit a task)
+- **DELETE**: Remove data (e.g., delete a task)
+
+**Simple answer:** GET to read, POST to create, PUT/PATCH to update, DELETE to remove.
+
+---
+
+## 35. What is JSON?
+JSON (JavaScript Object Notation) is a lightweight format for storing and exchanging data. It's easy for humans to read and machines to parse.
+
+```json
+{
+  "title": "Learn Python",
+  "completed": false
+}
+```
+
+**Simple answer:** A simple text format for sending data between servers and apps.
+
+---
+
+## 36. What are HTTP headers?
+HTTP headers are extra information sent with requests and responses. They tell the server/client details like content type, authentication, or caching.
+
+```http
+Content-Type: application/json
+Authorization: Bearer token123
+```
+
+**Simple answer:** Metadata about the request/response - like labels on a package.
+
+---
+
+## 37. What is REST?
+REST (Representational State Transfer) is an architectural style for APIs. It uses standard HTTP methods and is stateless (each request contains all needed info).
+
+**Simple answer:** A standard way to build APIs using HTTP methods like GET, POST, PUT, DELETE.
+
+---
+
+## 38. What are browser developer tools?
+Developer tools are built-in browser features (F12) that let you inspect HTML, debug JavaScript, view network requests, and analyze performance.
+
+**Simple answer:** Tools in your browser to see how websites work and fix problems.
+
+---
+
+## 39. What is the difference between PUT and PATCH?
+- **PUT**: Replaces the entire resource with new data
+- **PATCH**: Updates only the specified fields of a resource
+
+**Simple answer:** PUT replaces everything; PATCH updates only what you specify.
+
+---
+
+## 40. What makes a good README?
+A good README includes:
+- Project description and purpose
+- Installation instructions
+- Usage examples
+- Features list
+- How to contribute
+- License information
+
+**Simple answer:** Clear documentation that helps others understand and use your project.
+
+---
+
+## HTTP Status Codes Reference
+
+| Code                      | Meaning                   | Example                            |
+| ------------------------- | ------------------------- | ---------------------------------- |
+| 200 OK                    | Success                   | Task list returned                 |
+| 201 Created               | New resource created      | New task added                     |
+| 400 Bad Request           | Client sent invalid data  | Empty task title                   |
+| 401 Unauthorized          | Not logged in             | Missing token                      |
+| 403 Forbidden             | Logged in but not allowed | Trying to edit another user's task |
+| 404 Not Found             | Resource does not exist   | Invalid task ID                    |
+| 500 Internal Server Error | Server-side problem       | Bug in backend code                |
+
