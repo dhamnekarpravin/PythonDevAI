@@ -480,3 +480,131 @@ A good README includes:
 | 404 Not Found             | Resource does not exist   | Invalid task ID                    |
 | 500 Internal Server Error | Server-side problem       | Bug in backend code                |
 
+---
+
+# Day 4: SQL and Databases
+
+## 41. What is a database table?
+A table is a structured collection of data organized in rows and columns. Each row represents a record, and each column represents a field.
+
+```sql
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255),
+    completed BOOLEAN
+);
+```
+
+**Simple answer:** Like a spreadsheet with rows of data and columns for different properties.
+
+---
+
+## 42. What is a primary key?
+A primary key is a unique identifier for each record in a table. It ensures no two rows have the same ID and cannot be NULL.
+
+```sql
+id SERIAL PRIMARY KEY  -- Each task gets a unique ID
+```
+
+**Simple answer:** A unique ID number for each row, like a social security number for database records.
+
+---
+
+## 43. What is a foreign key?
+A foreign key links one table to another by referencing the primary key of another table. It creates relationships between tables.
+
+```sql
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id)  -- Foreign key
+);
+```
+
+**Simple answer:** A link that connects rows in one table to rows in another table.
+
+---
+
+## 44. What is a SQL JOIN?
+A JOIN combines rows from two or more tables based on a related column between them.
+
+```sql
+-- Get tasks with user names
+SELECT tasks.title, users.name
+FROM tasks
+JOIN users ON tasks.user_id = users.id;
+```
+
+**Simple answer:** A way to combine data from multiple tables into one result.
+
+---
+
+## 45. What are the types of JOINs?
+- **INNER JOIN**: Returns only matching rows from both tables
+- **LEFT JOIN**: Returns all rows from left table, matching from right
+- **RIGHT JOIN**: Returns all rows from right table, matching from left
+- **FULL JOIN**: Returns all rows when there's a match in either table
+
+**Simple answer:** Different ways to combine tables - inner for matches only, left/right for all from one side.
+
+---
+
+## 46. What is a database index?
+An index is a data structure that improves query speed by creating a quick lookup path for specific columns.
+
+```sql
+CREATE INDEX idx_task_title ON tasks(title);
+```
+
+**Simple answer:** Like a book index - helps find data quickly without scanning everything.
+
+---
+
+## 47. What is a SQL transaction?
+A transaction is a sequence of operations treated as a single unit. If any part fails, the entire transaction is rolled back.
+
+```sql
+BEGIN;
+INSERT INTO tasks (title) VALUES ('Task 1');
+INSERT INTO tasks (title) VALUES ('Task 2');
+COMMIT;  -- Or ROLLBACK if something fails
+```
+
+**Simple answer:** A group of operations that all succeed together or all fail together.
+
+---
+
+## 48. What are the basic SQL CRUD operations?
+- **CREATE**: INSERT - add new data
+- **READ**: SELECT - retrieve data
+- **UPDATE**: UPDATE - modify existing data
+- **DELETE**: DELETE - remove data
+
+```sql
+INSERT INTO tasks (title) VALUES ('Learn SQL');
+SELECT * FROM tasks;
+UPDATE tasks SET completed = true WHERE id = 1;
+DELETE FROM tasks WHERE id = 1;
+```
+
+**Simple answer:** The four basic operations: add, read, update, and delete data.
+
+---
+
+## 49. What is the difference between VARCHAR and TEXT?
+- **VARCHAR**: Fixed maximum length, more efficient for short strings
+- **TEXT**: Variable length with no limit, better for long content
+
+```sql
+title VARCHAR(255)   -- Short text with max length
+description TEXT     -- Long text without limit
+```
+
+**Simple answer:** VARCHAR for short text with a limit; TEXT for long content without limits.
+
+---
+
+## 50. What is database normalization?
+Normalization is organizing data to reduce redundancy and improve data integrity by splitting data into related tables.
+
+**Simple answer:** Breaking data into separate tables to avoid duplication and keep data consistent.
+
