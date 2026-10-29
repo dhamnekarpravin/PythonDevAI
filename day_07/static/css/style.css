@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #111827;
+}
+
+.brand {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-card {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+.badge.pending {
+    background: #fef3c7;
+}
+
+.badge.in_progress {
+    background: #dbeafe;
+}
+
+.badge.completed {
+    background: #dcfce7;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.3rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+}
+
+.error {
+    color: #b91c1c;
+    margin-top: 0.3rem;
+}
+
+.messages {
+    margin-bottom: 1rem;
+}
+
+.message.success {
+    background: #dcfce7;
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+.button {
+    background: #2563eb;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+}
+
+.button.danger {
+    background: #dc2626;
+}
+
+.button.secondary {
+    background: #6b7280;
+}

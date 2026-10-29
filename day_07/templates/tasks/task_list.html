@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>All Tasks</h1>
+        <p>Total tasks: {{ total_tasks }}</p>
+    </div>
+
+    {% if page_obj.object_list %}
+        <ul class="task-list">
+            {% for task in page_obj.object_list %}
+                <li class="task-card">
+                    <div>
+                        <h2>{{ task.title }}</h2>
+                        <p>{{ task.description|default:"No description" }}</p>
+                        <span class="badge {{ task.status }}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="task-actions">
+                        <a href="{% url 'task-update' task.pk %}">Edit</a>
+                        <a href="{% url 'task-delete' task.pk %}">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No tasks found. Create your first task.</p>
+    {% endif %}
+{% endblock %}
