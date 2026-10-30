@@ -407,3 +407,378 @@ Use Django's Paginator class to split your QuerySet into pages. Pass the page ob
 Messages provide user feedback after actions (success, error, warning). They persist across redirects, so users see notifications even after page changes.
 
 **Simple answer:** Show helpful notifications to users after they do something.
+
+---
+
+# Day 8: DRF Fundamentals - Interview Questions
+
+## 26. What is Django REST Framework (DRF)?
+DRF is a powerful toolkit for building Web APIs in Django. It provides serializers, viewsets, authentication, and other tools to create RESTful APIs easily.
+
+```python
+# Install DRF
+pip install djangorestframework
+
+# Add to INSTALLED_APPS
+INSTALLED_APPS = [
+    'rest_framework',
+    'tasks',
+]
+```
+
+**Simple answer:** A Django add-on that makes building APIs much easier.
+
+---
+
+## 27. What is a serializer?
+A serializer converts complex data (like models) into JSON and vice versa. It handles validation and data transformation.
+
+```python
+from rest_framework import serializers
+from .models import Task
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['id', 'title', 'status', 'priority']
+```
+
+**Simple answer:** Converts Python objects to JSON and JSON back to Python objects.
+
+---
+
+## 28. What is the difference between ModelSerializer and regular Serializer?
+- **ModelSerializer**: Automatically generates fields based on a model
+- **Serializer**: You manually define all fields
+
+```python
+# ModelSerializer - automatic
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = '__all__'
+
+# Regular Serializer - manual
+class TaskSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    status = serializers.CharField()
+```
+
+**Simple answer:** ModelSerializer auto-generates from your model; regular Serializer requires manual field definition.
+
+---
+
+## 29. What is an APIView?
+APIView is the base class for DRF views. It provides methods like get(), post(), put(), delete() for handling HTTP requests.
+
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class TaskListAPIView(APIView):
+    def get(self, request):
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+```
+
+**Simple answer:** A class-based view with methods for each HTTP verb (GET, POST, etc.).
+
+---
+
+## 30. What are generic views in DRF?
+Generic views are pre-built views that handle common patterns like list, create, retrieve, update, and delete operations.
+
+```python
+from rest_framework import generics
+
+class TaskListCreateView(generics.ListCreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+```
+
+**Simple answer:** Ready-made views for common API operations, saving you from writing repetitive code.
+
+---
+
+## 31. What is a ViewSet?
+A ViewSet combines multiple views (list, create, retrieve, update, delete) into a single class. It works with routers to automatically generate URLs.
+
+```python
+from rest_framework import viewsets
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+```
+
+**Simple answer:** A single class that handles all CRUD operations for a model.
+
+---
+
+## 32. What is a router in DRF?
+A router automatically generates URL patterns for your ViewSets, saving you from manually defining URLs.
+
+```python
+from rest_framework import routers
+from .views import TaskViewSet
+
+router = routers.DefaultRouter()
+router.register(r'tasks', TaskViewSet)
+
+urlpatterns = [
+    path('api/', include(router.urls)),
+]
+```
+
+**Simple answer:** Automatically creates URLs for your ViewSet so you don't have to write them manually.
+
+---
+
+## 33. What is the difference between APIView and ViewSet?
+- **APIView**: You define methods (get, post, put, delete) and manually create URLs
+- **ViewSet**: Combines multiple operations, works with routers for automatic URL generation
+
+**Simple answer:** APIView gives you manual control; ViewSet is more automatic with routers.
+
+---
+
+## 34. How do you return JSON responses in DRF?
+Use the Response class from DRF, which automatically converts data to JSON.
+
+```python
+from rest_framework.response import Response
+
+def get(self, request):
+    data = {'message': 'Hello'}
+    return Response(data)  # Automatically JSON
+```
+
+**Simple answer:** Use DRF's Response class instead of Django's HttpResponse.
+
+---
+
+## 35. What is @api_view decorator?
+The @api_view decorator converts a regular function-based view into an API view that handles content negotiation and authentication.
+
+```python
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['GET', 'POST'])
+def task_list(request):
+    if request.method == 'GET':
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+```
+
+**Simple answer:** Turns a regular function into an API view that can handle different HTTP methods.
+
+---
+
+## 36. What is the difference between ListAPIView and RetrieveAPIView?
+- **ListAPIView**: Returns a list of objects (GET /tasks/)
+- **RetrieveAPIView**: Returns a single object (GET /tasks/1/)
+
+```python
+class TaskListView(generics.ListAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+class TaskDetailView(generics.RetrieveAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+```
+
+**Simple answer:** List for multiple items; Retrieve for single item.
+
+---
+
+## 37. How do you handle validation in serializers?
+DRF automatically validates based on field types. You can add custom validation with validate() or validate_<field>() methods.
+
+```python
+class TaskSerializer(serializers.ModelSerializer):
+    def validate_title(self, value):
+        if len(value) < 5:
+            raise serializers.ValidationError("Title too short")
+        return value
+
+    def validate(self, data):
+        if data['status'] == 'completed' and not data.get('due_date'):
+            raise serializers.ValidationError("Completed tasks need due date")
+        return data
+```
+
+**Simple answer:** DRF auto-validates fields; add custom validation with validate methods.
+
+---
+
+## 38. What is status in DRF Response?
+The status parameter sets the HTTP status code for the response.
+
+```python
+return Response(serializer.data, status=201)  # Created
+return Response(serializer.errors, status=400)  # Bad Request
+return Response({'error': 'Not found'}, status=404)  # Not Found
+```
+
+**Simple answer:** Sets the HTTP status code (200, 201, 400, 404, etc.) for the API response.
+
+---
+
+## 39. What are the main generic view classes in DRF?
+- **ListAPIView**: List all objects
+- **CreateAPIView**: Create new object
+- **RetrieveAPIView**: Get single object
+- **UpdateAPIView**: Update object
+- **DestroyAPIView**: Delete object
+- **ListCreateAPIView**: List and create
+- **RetrieveUpdateDestroyAPIView**: Retrieve, update, delete
+
+**Simple answer:** Pre-built views for each CRUD operation.
+
+---
+
+## 40. How do you serialize a single object vs a list?
+Use `many=True` when serializing a list of objects.
+
+```python
+# Single object
+task = Task.objects.get(id=1)
+serializer = TaskSerializer(task)
+
+# List of objects
+tasks = Task.objects.all()
+serializer = TaskSerializer(tasks, many=True)
+```
+
+**Simple answer:** Add many=True when serializing multiple objects.
+
+---
+
+## 41. What is the difference between @action decorator in ViewSets?
+The @action decorator adds custom actions to a ViewSet beyond the standard CRUD operations.
+
+```python
+from rest_framework.decorators import action
+
+class TaskViewSet(viewsets.ModelViewSet):
+    @action(detail=True, methods=['post'])
+    def mark_complete(self, request, pk=None):
+        task = self.get_object()
+        task.status = 'completed'
+        task.save()
+        return Response({'status': 'completed'})
+```
+
+**Simple answer:** Adds custom methods to your ViewSet for special operations.
+
+---
+
+## 42. How do you filter QuerySets in DRF views?
+Filter the queryset in the view's get_queryset() method or use queryset attribute.
+
+```python
+class TaskListView(generics.ListAPIView):
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        queryset = Task.objects.all()
+        status = self.request.query_params.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+        return queryset
+```
+
+**Simple answer:** Filter in get_queryset() based on request parameters.
+
+---
+
+## 43. What is request.data in DRF?
+request.data contains the parsed request body (JSON, form data, etc.). It's like request.POST but works for any content type.
+
+```python
+def post(self, request):
+    # request.data automatically parses JSON/form data
+    serializer = TaskSerializer(data=request.data)
+```
+
+**Simple answer:** The parsed data from the request body (works for JSON, forms, etc.).
+
+---
+
+## 44. How do you add DRF to an existing Django project?
+1. Install DRF: `pip install djangorestframework`
+2. Add to INSTALLED_APPS in settings.py
+3. Create serializers
+4. Create API views or ViewSets
+5. Configure URLs
+
+**Simple answer:** Install, add to apps, create serializers and views, set up URLs.
+
+---
+
+## 45. What is the purpose of serializers in DRF?
+Serializers handle:
+- Converting models to JSON (serialization)
+- Converting JSON to models (deserialization)
+- Data validation
+- Error handling
+
+**Simple answer:** They convert between Python objects and JSON while validating data.
+
+---
+
+# Project-Based Questions
+
+## 46. Why use ViewSets instead of APIViews?
+ViewSets reduce code duplication by combining multiple views (list, create, retrieve, update, delete) into one class. Routers automatically generate URLs, saving time.
+
+**Simple answer:** Less code, automatic URL generation, and better organization.
+
+## 47. How do you create a CRUD API with DRF?
+Use ModelViewSet with a ModelSerializer and a router. This gives you full CRUD with minimal code.
+
+```python
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+router.register('tasks', TaskViewSet)
+```
+
+**Simple answer:** ModelViewSet + ModelSerializer + router = full CRUD API.
+
+## 48. Why use serializers instead of returning model objects directly?
+Serializers control what data is exposed, handle validation, and convert to JSON format. They provide security by not exposing sensitive fields.
+
+**Simple answer:** Control what data is sent, validate input, and convert to proper JSON format.
+
+## 49. How do you handle errors in DRF?
+DRF automatically returns validation errors in a consistent JSON format. You can also raise exceptions like ValidationError or NotFound.
+
+```python
+if not task:
+    raise NotFound("Task not found")
+```
+
+**Simple answer:** DRF auto-handles validation errors; use exceptions for custom error cases.
+
+## 50. What is the difference between generics and ViewSets?
+- **Generics**: Individual views for specific operations (list, create, etc.)
+- **ViewSets**: All operations in one class with automatic URL routing
+
+**Simple answer:** Generics are separate views; ViewSets combine everything with routers.
